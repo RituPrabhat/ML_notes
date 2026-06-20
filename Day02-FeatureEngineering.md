@@ -57,4 +57,28 @@ Performance improves. Why?Because we provided more useful information.This is fe
 
 <img width="927" height="510" alt="image" src="https://github.com/user-attachments/assets/536c92e9-7bc7-43a9-bf31-a14982614d8d" />
 
+Feature Transformation
+
+Missing Value Imputation: Machine learning libraries (like Scikit-learn) do not accept missing values; you must remove or impute them using techniques like Mean, Median, or Mode.
+
+Handling Categorical Values: Converting categorical text data into numerical formats (e.g., One-Hot Encoding) so the machine can process it.
+
+Outlier Detection: Identifying and removing outliers is crucial, as they can distort results in algorithms like Linear Regression.
+
+Feature Scaling: Standardizing data ranges (e.g., keeping values between -1 to 1). This is essential for algorithms based on Euclidean distance, like K-Nearest Neighbors (KNN), to ensure one feature doesn't dominate others.
+
+Feature Construction: Involves creating new, meaningful features from existing ones.
+
+Example: In the Titanic dataset, the speaker suggests combining "Siblings/Spouses" and "Parents/Children" counts to create a new "Family Size" feature.
+
+ Feature Selection 
+
+Selecting only the most important features from a large dataset to improve model speed and performance.
+Example: In image data (like MNIST), most pixels (features) might be irrelevant; focusing on central pixels is more efficient.
+
+Feature Extraction
+
+Generating completely new, reduced sets of features from original ones (often using algorithms like PCA).
+Example: In real estate, instead of using "Number of Rooms" and "Wall Count," you might create a single "Square Footage" feature.
+
 
