@@ -193,6 +193,8 @@ It transforms every value using the following formula.
 z=\frac{x-\mu}{\sigma}
 \]
 
+new_value = (value - mean) / standard_deviation
+
 where,
 
 - **x** = Original value
