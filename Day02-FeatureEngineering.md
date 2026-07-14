@@ -328,5 +328,459 @@ A salary of ₹5 crore may be an outlier, but if it belongs to a CEO, it is vali
 Always understand the reason before removing outliers.
 
 ---
+# 4. Feature Scaling
+
+## What is Feature Scaling?
+
+Feature Scaling is the process of **bringing all numerical features to a similar scale** so that no feature dominates another due to its larger values.
+
+In many datasets, different features have completely different ranges.
+
+For example:
+
+| Age | Salary |
+|------|---------|
+|20|30,000|
+|35|75,000|
+|50|1,20,000|
+
+Notice that:
+
+- Age ranges from **20–50**
+- Salary ranges from **30,000–1,20,000**
+
+The salary values are much larger than the age values.
+
+---
+
+## Why is Feature Scaling Needed?
+
+Many Machine Learning algorithms calculate the **distance between data points**.
+
+For example:
+
+- K-Nearest Neighbors (KNN)
+- K-Means Clustering
+- Support Vector Machine (SVM)
+- Principal Component Analysis (PCA)
+
+These algorithms commonly use **Euclidean Distance**.
+
+### Euclidean Distance Formula
+
+\[
+Distance=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}
+\]
+
+If one feature has much larger values than another, it dominates the distance calculation.
+
+### Example
+
+Suppose two customers have:
+
+Customer A
+
+- Age = 25
+- Salary = ₹40,000
+
+Customer B
+
+- Age = 30
+- Salary = ₹80,000
+
+Difference in:
+
+Age = 5
+
+Salary = 40,000
+
+Clearly, salary contributes far more to the distance than age.
+
+The model will almost ignore the age feature, which is unfair if age is also important.
+
+---
+
+## Solution
+
+Scale every feature to approximately the same range.
+
+Example:
+
+Before Scaling
+
+| Age | Salary |
+|------|---------|
+|20|30000|
+|40|80000|
+
+After Scaling
+
+| Age | Salary |
+|------|---------|
+|0.20|0.30|
+|0.60|0.80|
+
+Now both features contribute almost equally.
+
+---
+
+## Common Feature Scaling Techniques
+
+### 1. Standardization (Z-score Scaling)
+
+Formula:
+
+\[
+z=\frac{x-\mu}{\sigma}
+\]
+
+where
+
+- x = original value
+- μ = mean
+- σ = standard deviation
+
+After standardization:
+
+- Mean becomes **0**
+- Standard deviation becomes **1**
+
+---
+
+### 2. Min-Max Normalization
+
+Formula:
+
+\[
+x'=\frac{x-x_{min}}{x_{max}-x_{min}}
+\]
+
+Output range:
+
+Usually **0 to 1**
+
+---
+
+## When is Feature Scaling Required?
+
+✔ Required
+
+- KNN
+- K-Means
+- SVM
+- PCA
+- Neural Networks
+- Gradient Descent based algorithms
+
+Usually Not Required
+
+- Decision Trees
+- Random Forest
+- XGBoost
+- LightGBM
+
+These tree-based models split data based on thresholds rather than distances.
+
+---
+
+# Summary of Feature Transformation
+
+Feature Transformation includes techniques that **modify existing features** to make them more suitable for machine learning.
+
+Some common transformation techniques are:
+
+- Missing Value Imputation
+- Handling Categorical Variables
+- Outlier Detection
+- Feature Scaling
+- Log Transformation
+- Box-Cox Transformation
+
+The goal is **not to create new features**, but to improve the existing ones.
+
+---
+
+# 5. Feature Construction
+
+## What is Feature Construction?
+
+Feature Construction (also called **Feature Creation**) is the process of **creating new features from existing features** using domain knowledge, intuition, or experience.
+
+Unlike Feature Transformation, we are **not just modifying a feature**.
+
+Instead, we **create a completely new feature**.
+
+---
+
+## Why is Feature Construction Needed?
+
+Sometimes the existing features do not provide enough useful information.
+
+By combining or manipulating existing features, we can create more meaningful features that improve model performance.
+
+---
+
+## Titanic Dataset Example
+
+Suppose the dataset contains two columns:
+
+| SibSp | Parch |
+|--------|--------|
+|1|0|
+|3|1|
+|0|0|
+
+Where:
+
+- **SibSp** = Number of siblings/spouses traveling with the passenger
+- **Parch** = Number of parents/children traveling with the passenger
+
+Instead of giving these two separate columns to the model, we can create:
+
+FamilySize = SibSp + Parch + 1
+
+(+1 represents the passenger themselves.)
+
+Example:
+
+| SibSp | Parch | FamilySize |
+|--------|--------|------------|
+|1|0|2|
+|3|1|5|
+|0|0|1|
+
+Now the model directly knows how many family members are traveling together.
+
+---
+
+## Another Example
+
+We can further convert FamilySize into categories.
+
+| FamilySize | Category |
+|-------------|----------|
+|1|Alone|
+|2–4|Small Family|
+|5+|Large Family|
+
+Sometimes these categories help the model perform even better.
+
+---
+
+## How Are New Features Created?
+
+Feature Construction depends heavily on:
+
+- Domain Knowledge
+- Experience
+- Problem Understanding
+- Creativity
+- Intuition
+
+There is no fixed formula.
+
+Different data scientists may create different useful features from the same dataset.
+
+---
+
+# Feature Transformation vs Feature Construction
+
+| Feature Transformation | Feature Construction |
+|------------------------|----------------------|
+|Modifies existing features.|Creates completely new features.|
+|Does not increase the number of features.|Usually increases the number of features.|
+|Example: Scaling age.|Example: Creating BMI from height and weight.|
+
+---
+
+# 6. Feature Selection
+
+## What is Feature Selection?
+
+Feature Selection is the process of **choosing only the most important features** and removing irrelevant or redundant ones.
+
+Instead of using every available column, we keep only the useful ones.
+
+---
+
+## Why is Feature Selection Needed?
+
+Datasets may contain hundreds or even thousands of features.
+
+Many of them:
+
+- Carry little useful information
+- Increase training time
+- Increase memory usage
+- Cause overfitting
+
+Removing such features often improves model performance.
+
+---
+
+## Example: MNIST Handwritten Digits
+
+Each handwritten digit image has:
+
+28 × 28 = 784 pixels
+
+Every pixel becomes one feature.
+
+Pixel1
+Pixel2
+Pixel3
+...
+Pixel784
+
+However, not every pixel contributes equally.
+
+Pixels around the corners are often blank (background), while pixels near the center usually contain the handwritten digit.
+
+Feature Selection removes these unimportant pixels and keeps only the informative ones.
+
+---
+
+## Advantages
+
+- Faster training
+- Less memory usage
+- Reduced overfitting
+- Better model interpretability
+- Sometimes higher accuracy
+
+---
+
+## Common Feature Selection Methods
+
+- Filter Methods
+- Wrapper Methods
+- Embedded Methods
+- Forward Selection
+- Backward Elimination
+- Recursive Feature Elimination (RFE)
+
+---
+
+# Feature Selection vs Feature Construction
+
+Feature Selection
+
+100 Features
+      ↓
+Choose Best 20
+
+Feature Construction
+
+100 Features
+      ↓
+Create New Features
+
+---
+
+# 7. Feature Extraction
+
+## What is Feature Extraction?
+
+Feature Extraction creates **entirely new features** from the existing ones **using mathematical algorithms**.
+
+Unlike Feature Construction, where humans design new features, Feature Extraction automatically discovers better feature representations.
+
+---
+
+## Why Do We Need Feature Extraction?
+
+Sometimes two or more features contain overlapping information.
+
+Instead of using all of them separately, Feature Extraction combines them into fewer, more informative features.
+
+This reduces dimensionality while preserving as much useful information as possible.
+
+---
+
+## Real Estate Example
+
+Suppose we have:
+
+| Number of Rooms | Total Area | Price |
+|-----------------|------------|--------|
+|3|1200|50L|
+|4|1800|80L|
+
+Both **Number of Rooms** and **Total Area** describe the size of a house.
+
+Rather than using them separately, Feature Extraction may generate a new feature representing the overall size of the property.
+
+The model then works with this new feature instead of the original ones.
+
+---
+
+## Geometric Intuition
+
+Imagine data points plotted on two axes:
+
+X
+|
+|     ●
+|   ●
+| ●
+|________________ 
+
+Feature Extraction rotates or transforms the coordinate system to find a new axis that captures the maximum variation in the data.
+
+Instead of keeping both original axes, it keeps only the most informative new axis.
+
+---
+
+## Principal Component Analysis (PCA)
+
+The most popular Feature Extraction algorithm is **Principal Component Analysis (PCA)**.
+
+PCA:
+
+- Creates new features called **Principal Components**
+- These components are combinations of the original features
+- Keeps the components containing the most information
+- Removes components with very little information
+
+This reduces the number of features while preserving most of the important patterns.
+
+---
+
+## Feature Construction vs Feature Extraction
+
+| Feature Construction | Feature Extraction |
+|----------------------|--------------------|
+|New features are created manually using domain knowledge.|New features are generated automatically using mathematical algorithms.|
+|Human decides how to create the feature.|Algorithm decides how to create the feature.|
+|Requires intuition and experience.|Requires algorithms such as PCA.|
+
+---
+
+# Complete Feature Engineering Flow
+
+Raw Data
+    │
+    ▼
+Feature Transformation
+    │
+    ├── Missing Value Imputation
+    ├── Categorical Encoding
+    ├── Outlier Detection
+    ├── Feature Scaling
+    │
+    ▼
+Feature Construction
+    │
+    ▼
+Feature Selection
+    │
+    ▼
+Feature Extraction
+    │
+    ▼
+Prepared Dataset
+    │
+    ▼
+Machine Learning Model
 
 
