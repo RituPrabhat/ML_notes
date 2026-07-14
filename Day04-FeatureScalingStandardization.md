@@ -547,9 +547,542 @@ Therefore,
 - Standardization does **not** remove outliers.
 
 ---
+# Standardization in Scikit-learn
+
+Scikit-learn provides the **`StandardScaler`** class to perform Standardization automatically.
+
+Instead of manually calculating:
+
+- Mean
+- Standard Deviation
+- Applying the Z-score formula
+
+`StandardScaler` does everything for us.
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+```
+
+---
+
+# Correct Workflow for Standardization
+
+A very important rule is:
+
+> **Always split the dataset into training and testing sets before applying Feature Scaling.**
+
+Correct workflow:
+
+```
+Dataset
+   │
+   ▼
+Train-Test Split
+   │
+   ▼
+Fit StandardScaler on Training Data
+   │
+   ▼
+Transform Training Data
+   │
+   ▼
+Transform Test Data
+```
+
+---
+
+# Why Should We Split Before Scaling?
+
+Suppose we have:
+
+```
+Total Dataset = 1000 samples
+
+Training = 800
+
+Testing = 200
+```
+
+If we calculate the mean using **all 1000 samples**, the model indirectly gains information about the test data.
+
+This is called **Data Leakage**.
+
+Since the model should never "see" the test data during training, we must avoid this.
+
+---
+
+# The Correct Procedure
+
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+```
+
+Create the scaler.
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+```
+
+---
+
+## Step 1: Fit on Training Data
+
+```python
+scaler.fit(X_train)
+```
+
+### What does `fit()` do?
+
+It **does not change the data.**
+
+Instead, it learns and stores:
+
+- Mean (μ)
+- Standard Deviation (σ)
+
+for each feature.
+
+For example,
+
+```
+Age Mean = 37.5
+
+Age SD = 10.2
+
+Salary Mean = 70000
+
+Salary SD = 22000
+```
+
+These values are stored inside the scaler.
+
+---
+
+## Step 2: Transform the Training Data
+
+```python
+X_train_scaled = scaler.transform(X_train)
+```
+
+Now every value is converted using
+
+\[
+z=\frac{x-\mu}{\sigma}
+\]
+
+using the mean and standard deviation learned from the training data.
+
+---
+
+## Step 3: Transform the Test Data
+
+```python
+X_test_scaled = scaler.transform(X_test)
+```
+
+Notice something important:
+
+We **do not call `fit()` again** on the test data.
+
+Instead, we reuse the statistics learned from the training data.
+
+---
+
+# Never Do This
+
+❌ Incorrect:
+
+```python
+scaler.fit(X_train)
+
+scaler.fit(X_test)
+```
+
+This causes **Data Leakage**.
+
+---
+
+# Always Do This
+
+✔ Correct
+
+```python
+scaler.fit(X_train)
+
+X_train_scaled = scaler.transform(X_train)
+
+X_test_scaled = scaler.transform(X_test)
+```
+
+---
+
+# Fit vs Transform
+
+| Method | Purpose |
+|---------|---------|
+| `fit()` | Learns the mean and standard deviation from the training data. |
+| `transform()` | Applies the learned statistics to scale the data. |
+| `fit_transform()` | Performs both operations together (commonly used on training data). |
+
+---
+
+# Why Does `StandardScaler` Return a NumPy Array?
+
+Suppose the input is a pandas DataFrame.
+
+```python
+X_train
+```
+
+Output after scaling:
+
+```python
+X_train_scaled
+```
+
+becomes a **NumPy array**.
+
+This is normal because `StandardScaler` performs numerical computations and returns the transformed numerical values.
+
+If you want a DataFrame again:
+
+```python
+import pandas as pd
+
+X_train_scaled = pd.DataFrame(
+    X_train_scaled,
+    columns=X_train.columns
+)
+```
+
+---
+
+# How Can We Verify Standardization?
+
+Use the `describe()` function before and after scaling.
+
+### Before Standardization
+
+| Statistic | Age |
+|------------|-----|
+| Mean | 37.9 |
+| Std | 10.34 |
+
+---
+
+### After Standardization
+
+| Statistic | Age |
+|------------|-----|
+| Mean | ≈ 0 |
+| Std | ≈ 1 |
+
+This confirms that Standardization has worked correctly.
+
+---
+
+# Visual Effect of Standardization
+
+Suppose we plot:
+
+- Age
+- Salary
+
+before scaling.
+
+The data points may look like this:
+
+```
+Salary
+
+      •
+          •
+               •
 
 
+______________________
 
-### Q7. Does Standardization change the order of data?
+        Age
+```
+
+Notice:
+
+- Salary has a much larger range.
+- Age has a much smaller range.
+
+After Standardization:
+
+```
+        •
+     •
+        •
+   •
+
+______________________
+```
+
+### Important Observation
+
+- The **shape of the data remains the same.**
+- The **relative positions of the points remain the same.**
+- Only the **scale changes**.
+
+---
+
+# Distribution Before and After Scaling
+
+A very important property of Standardization is:
+
+> **It does not change the shape of the distribution.**
+
+Suppose Age originally follows this distribution:
+
+```
+      /\
+
+    /    \
+
+__/        \__
+```
+
+After Standardization:
+
+```
+      /\
+
+    /    \
+
+__/        \__
+```
+
+The curve is exactly the same.
+
+Only the x-axis values have changed.
+
+Similarly, the Salary distribution also keeps its shape.
+
+---
+
+# Does Standardization Improve Accuracy?
+
+The instructor demonstrated this using two models.
+
+## Logistic Regression
+
+Without Standardization:
+
+```
+Accuracy = 65%
+```
+
+With Standardization:
+
+```
+Accuracy = 86%
+```
+
+### Why?
+
+Logistic Regression uses **Gradient Descent** for optimization.
+
+Gradient Descent converges much faster and more effectively when features are on a similar scale.
+
+---
+
+## Decision Tree
+
+Without Scaling:
+
+```
+Accuracy ≈ Same
+```
+
+With Scaling:
+
+```
+Accuracy ≈ Same
+```
+
+### Why?
+
+Decision Trees do not calculate distances or optimize using Gradient Descent.
+
+Instead, they split the data using threshold values (e.g., `Age < 30`), so feature scaling has almost no effect.
+
+---
+
+# Effect of Outliers on Standardization
+
+Suppose the original Age values are:
+
+```
+18
+22
+25
+30
+35
+```
+
+Now we add an outlier:
+
+```
+18
+22
+25
+30
+35
+120
+```
+
+After Standardization:
+
+```
+-0.7
+-0.5
+-0.3
+0.1
+0.3
+6.8
+```
+
+The outlier is still an outlier.
+
+### Important Point
+
+> **Standardization does not remove outliers.**
+
+It simply rescales them.
+
+If outliers are present, they should usually be handled **before** applying Standardization.
+
+---
+
+# When Should You Use Standardization?
+
+Standardization is recommended for algorithms that rely on:
+
+- Distance calculations
+- Gradient Descent
+- Variance
+
+### Use Standardization for:
+
+### 1. K-Nearest Neighbors (KNN)
+
+Uses Euclidean Distance.
+
+Without scaling, features with larger values dominate the distance.
+
+---
+
+### 2. K-Means Clustering
+
+Assigns points to clusters based on distance.
+
+Scaling ensures every feature contributes equally.
+
+---
+
+### 3. Principal Component Analysis (PCA)
+
+PCA identifies directions with maximum variance.
+
+If one feature has a much larger scale, PCA becomes biased toward that feature.
+
+Standardization makes PCA more reliable.
+
+---
+
+### 4. Gradient Descent Based Algorithms
+
+Examples:
+
+- Linear Regression (Gradient Descent)
+- Logistic Regression
+- Neural Networks
+
+Scaling helps these algorithms converge faster and more efficiently.
+
+---
+
+# When is Standardization Not Required?
+
+Tree-based algorithms generally do **not** require Feature Scaling.
+
+Examples:
+
+- Decision Tree
+- Random Forest
+- XGBoost
+- LightGBM
+- CatBoost
+
+### Why?
+
+These algorithms compare values using thresholds instead of calculating distances.
+
+For example:
+
+```
+Age < 30
+```
+
+Whether Age is:
+
+```
+30
+```
+
+or
+
+```
+0.32
+```
+
+the comparison logic remains the same.
+
+Hence, scaling has little or no impact.
+
+---
+
+# Algorithms That Require Standardization
+
+| Algorithm | Standardization Needed? | Reason |
+|-----------|--------------------------|--------|
+| KNN | ✅ Yes | Distance-based |
+| K-Means | ✅ Yes | Distance-based |
+| SVM | ✅ Yes | Distance-based optimization |
+| PCA | ✅ Yes | Variance-sensitive |
+| Logistic Regression | ✅ Yes | Gradient Descent |
+| Linear Regression (GD) | ✅ Yes | Gradient Descent |
+| Neural Networks | ✅ Yes | Faster convergence |
+| Decision Tree | ❌ No | Threshold-based |
+| Random Forest | ❌ No | Threshold-based |
+| XGBoost | ❌ No | Tree-based |
+| LightGBM | ❌ No | Tree-based |
+
+---
+
+# Key Takeaways
+
+- Always split the dataset before applying Standardization.
+- Fit the scaler only on the training data.
+- Transform both training and testing data using the same scaler.
+- Standardization changes the scale but preserves the shape of the data distribution.
+- Standardization does not remove outliers.
+- Distance-based and Gradient Descent-based algorithms benefit greatly from Standardization.
+- Tree-based algorithms usually do not require Standardization.
+
 
 No. It preserves the relative ordering of observations while changing only their scale.
