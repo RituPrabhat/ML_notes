@@ -209,17 +209,21 @@ The transformed value is called a **Z-score**.
 
 Suppose we have ages.
 
+```
 20
 25
 30
 35
 40
+```
 
 ### Step 1
 
 Calculate Mean.
 
+```
 Mean = 30
+```
 
 ### Step 2
 
