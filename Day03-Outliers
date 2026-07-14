@@ -17,3 +17,9 @@ Measurement/instrument error	                 Sensor glitch reads temperature as
 Natural variation (genuine rare event)	       A billionaire's income in a salary dataset	                                                          Usually keep, maybe transform
 Sampling error	                               Accidentally including a wrong population (e.g., a test account mixed into real user data)	           Remove
 Novelty / the actual signal you care about	   Fraudulent transactions, network intrusions                                                        	Keep — this IS what you're trying to detect
+
+Types of outliers 
+Global (point) outliers: a single point far from all other data, considered against the entire dataset. Example: one salary of 5 crore among salaries of 5-10 lakh.
+Contextual (conditional) outliers: normal in general, but abnormal in a specific context. Example: 35°C is a normal temperature in summer, but a huge outlier if recorded in winter — context (season) changes what "normal" means.
+Collective outliers: a group of points, each individually looking fine, but together forming an anomalous pattern. Example: a sudden sustained spike in server requests over 10 minutes — no single request looks unusual, but the pattern does.
+Most beginner treatment (IQR, Z-score) only catches global outliers. Catching contextual/collective outliers usually requires grouping by context first, or time-series/sequence-aware methods
