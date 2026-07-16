@@ -172,8 +172,28 @@ repl = list/index of brand names whose count is below the threshold (i.e., rare 
 df['brand'].replace(repl, 'uncommon') replaces all rare brand names with a single "uncommon" category.
 Result: After this transformation, brands like BMW, Ford, Mahindra, Maruti, Renault, Toyota, Hyundai remain as individual categories (since they have enough cars), while rare brands (below threshold) are grouped into a single "uncommon" category — significantly reducing the number of unique categories, hence reducing dimensionality after OHE.
 
-This becomes much easier and cleaner once you learn ColumnTransformer in the next video/note — you won't need this manual workaround; you'll be able to apply different transformers to different columns and build the entire pipeline in one go.
+This becomes much easier and cleaner once you learn ColumnTransformer in the next note — you won't need this manual workaround; you'll be able to apply different transformers to different columns and build the entire pipeline in one go.
 ```
+METHOD 1: 
+
+This one is automatic and clean. You give it the whole dataframe and just tell it which columns to encode. Pandas:
+
+Encodes fuel and owner
+
+Leaves brand and km_driven completely untouched
+
+Returns one single dataframe with everything already combined — encoded columns + untouched columns, all together
+
+No splitting, no hstack, no manual re-joining. That's the whole appeal of get_dummies — it's convenient for quick data analysis/EDA.
+
+But (as covered earlier) it's not safe for real ML projects, because it doesn't "remember" the encoding rules — running it again on new data (like test data at prediction time) isn't guaranteed to produce the same columns in the same order/consistency.
+
+METHOD 2:
+
+This one is safe for ML pipelines (it remembers what it learned from fit, and applies the exact same transformation consistently to train and test). But it comes at a cost: you must explicitly hand it only the columns you want encoded (X_train[['fuel','owner']]), and it hands back only those encoded columns — completely dropping brand and km_driven from its output.
+
+So you are responsible for stitching the untouched columns back with the newly encoded ones — that's the hstack step.
+
 Key Takeaways / Revision Points
 
 Nominal data (no order) → use One-Hot Encoding
