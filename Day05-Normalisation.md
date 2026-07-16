@@ -84,7 +84,7 @@ Now, after applying Min-Max Scaling, both quantities' minimum becomes 0 and maxi
 
 **Important note:** Min-Max Scaling guarantees the min and max values — it does NOT guarantee anything about mean or standard deviation (that will vary dataset to dataset). It only guarantees the min and max.
 
-I hope this transformation makes sense. Then, just like in the last video, I again plotted scatter plots comparing the original data and the Min-Max scaled data side by side. Visually, there isn't a huge difference in the scatter plot shape — you'll notice that (as I mentioned) the data gets compressed into a unit rectangle, and that's exactly what happened here. The original shape gets returned/preserved, just compressed into the unit box — the distribution shape stays almost identical.
+I hope this transformation makes sense. Then I again plotted scatter plots comparing the original data and the Min-Max scaled data side by side. Visually, there isn't a huge difference in the scatter plot shape — you'll notice that (as I mentioned) the data gets compressed into a unit rectangle, and that's exactly what happened here. The original shape gets returned/preserved, just compressed into the unit box — the distribution shape stays almost identical.
 
 If your distribution isn't very "normal" to begin with, you might notice slight shape changes. I'd recommend generating your own custom distributions and trying Min-Max Scaling on them yourself to build intuition — but generally, this scaling preserves the shape reasonably well, unlike some other transforms.
 
