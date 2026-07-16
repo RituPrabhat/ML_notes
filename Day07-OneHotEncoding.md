@@ -46,7 +46,7 @@ So, if you have N categories, keep only **(N-1) columns**.
 - **Multicollinearity**: when your input columns have a mathematical relationship/dependency on each other. Input columns in ML should be **independent** of one another (independent variables), not dependent.
 - In the color example: `color_Yellow + color_Blue + color_Red` always sums to 1 for every row — meaning if you know 2 of the 3 columns, you can always derive the 3rd. This creates a mathematical relationship between the columns → multicollinearity.
 - Example: if `color_Blue = 0` and `color_Red = 0`, then `color_Yellow` MUST be 1 — so the Yellow column is redundant; it carries no additional information.
-- This is problematic especially for **linear-based models** (Linear Regression, Logistic Regression) — a full explanation of why multicollinearity is a problem will be covered in a dedicated future video/note.
+- This is problematic especially for **linear-based models** (Linear Regression, Logistic Regression) — a full explanation of why multicollinearity is a problem will be covered in a dedicated future note.
 
 ### Solution
 - Drop one column entirely (e.g., drop the first one).
