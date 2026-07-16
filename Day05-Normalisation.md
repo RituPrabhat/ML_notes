@@ -16,7 +16,6 @@ Just like there are different types of Standardization, if you talk about "norma
 - **Max-Abs Scaling**
 - **Robust Scaling**
 
-These four are what we'll cover in this video. Besides these, if you go through the sklearn documentation, you'll find several more transformations you can read about — but we'll focus on these four, and most of our focus will be on **Min-Max Scaling**, because 90% of the time when you're applying normalization, you'll be using Min-Max Scaling.
 
 ## MinMax Scaling Intuition
 
