@@ -138,7 +138,7 @@ X_test_remaining = X_test.iloc[:, 0:2].values
 # Concatenate remaining columns with the new one-hot encoded columns
 X_train_final = np.hstack((X_train_remaining, X_train_new))
 X_test_final = np.hstack((X_test_remaining, X_test_new))
-Note: This manual splitting and merging is tedious. This exact problem is solved elegantly using ColumnTransformer (covered in a future video/note) — it lets you apply different transformers to different columns in a single line of code and get the final combined result directly, without needing to manually separate and re-join columns.
+Note: This manual splitting and merging is tedious. This exact problem is solved elegantly using ColumnTransformer (covered in a future note) — it lets you apply different transformers to different columns in a single line of code and get the final combined result directly, without needing to manually separate and re-join columns.
 
 Avoiding Dummy Variable Trap in sklearn
 
@@ -173,16 +173,29 @@ df['brand'].replace(repl, 'uncommon') replaces all rare brand names with a singl
 Result: After this transformation, brands like BMW, Ford, Mahindra, Maruti, Renault, Toyota, Hyundai remain as individual categories (since they have enough cars), while rare brands (below threshold) are grouped into a single "uncommon" category — significantly reducing the number of unique categories, hence reducing dimensionality after OHE.
 
 This becomes much easier and cleaner once you learn ColumnTransformer in the next video/note — you won't need this manual workaround; you'll be able to apply different transformers to different columns and build the entire pipeline in one go.
-
+```
 Key Takeaways / Revision Points
+
 Nominal data (no order) → use One-Hot Encoding
+
 OHE creates one new column per category; each row gets 1 in its category's column, 0 elsewhere
+
 More categories → more new columns → increased dimensionality (a drawback of OHE)
+
 Dummy Variable Trap: including all N dummy columns creates multicollinearity (columns become mathematically dependent on each other — e.g., they always sum to 1). Fix: drop one column (N categories → keep N-1 columns)
+
 pd.get_dummies(df, columns=[...], drop_first=True) — quick and useful for EDA, but not recommended for ML pipelines since it doesn't persist encoding logic between train/test or across runs
+
 sklearn.preprocessing.OneHotEncoder — preferred for actual ML projects since it can be fit on train data and consistently applied (transformed) on both train and test data
+
 drop='first' → avoids dummy variable trap
+
 sparse=False (or sparse_output=False) → returns dense array directly instead of sparse matrix
+
 dtype=np.int32 → controls output data type
-When a categorical column has too many unique categories (high cardinality, e.g., brand), avoid direct OHE — instead, keep only the most frequent categories as individual columns and group all rare/uncommon categories into a single new category (e.g., "uncommon") using a frequency threshold
-Manual splitting/merging of encoded and non-encoded columns is tedious — this will be simplified using ColumnTransformer (next video/note)
+
+When a categorical column has too many unique categories (high cardinality, e.g., brand), avoid direct OHE — instead, keep only the most frequent categories as individual columns and group all rare/uncommon categories 
+
+into a single new category (e.g., "uncommon") using a frequency threshold
+
+Manual splitting/merging of encoded and non-encoded columns is tedious — this will be simplified using ColumnTransformer (next note)
