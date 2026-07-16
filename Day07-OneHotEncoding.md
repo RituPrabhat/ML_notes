@@ -194,6 +194,8 @@ This one is safe for ML pipelines (it remembers what it learned from fit, and ap
 
 So you are responsible for stitching the untouched columns back with the newly encoded ones — that's the hstack step.
 
+
+
 Key Takeaways / Revision Points
 
 Nominal data (no order) → use One-Hot Encoding
