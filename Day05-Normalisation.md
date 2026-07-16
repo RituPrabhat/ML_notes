@@ -51,6 +51,9 @@ Initially, your data looks scattered — Height in centimeters on one axis, Weig
 
 When we apply Min-Max Scaling on top of this, what the transformation does is: it takes this entire scattered data and squeezes/compresses it into a box where both axes range between 0 and 1.
 
+<img width="717" height="268" alt="image" src="https://github.com/user-attachments/assets/0576b3ab-521d-4d62-99dd-a8b4938ba140" />
+
+
 So the geometric intuition of Min-Max Scaling is that you're taking your entire dataset and squeezing it into a **unit square** (or unit rectangle). If this were 3D data, you'd be compressing the entire dataset into a **unit cube**. If it had even more dimensions, you'd be compressing it into a **unit hypercube**.
 
 Basically, whether the data is small or large, you're compressing it so that it fits within this unit structure. That's the geometric intuition for Min-Max Scaling, as opposed to what Standardization does.
