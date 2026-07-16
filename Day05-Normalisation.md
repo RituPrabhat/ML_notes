@@ -60,7 +60,7 @@ Basically, whether the data is small or large, you're compressing it so that it 
 
 ## Code Example
 
-Now let's do this hands-on with an actual **Wine dataset**, which I downloaded — you can find it on my GitHub, I'll share the link there. We'll apply normalization and see how it actually works.
+Now let's do this hands-on with an actual **Wine dataset**. We'll apply normalization and see how it actually works.
 
 Let me go to my browser — I've already written the code here. Let's go through it.
 
