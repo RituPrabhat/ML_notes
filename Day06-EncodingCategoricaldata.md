@@ -135,9 +135,15 @@ Fit only on y_train, transform both y_train and y_test.
 
 Key Takeaways / Revision Points
 Nominal data → no order between categories → use One-Hot Encoding
+
 Ordinal data → clear order between categories → use Ordinal Encoding (must manually specify category order)
+
 Target/output column (categorical) → use Label Encoding, regardless of whether it's nominal or ordinal in nature
+
 Always do train-test split before any transformation
+
 Always fit on train data only, then transform both train and test data
+
 OrdinalEncoder is for input features (X); LabelEncoder is for target labels (y) — don't mix these up
+
 These encoding techniques are used in almost every ML project — a must-know fundamental
