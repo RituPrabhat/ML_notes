@@ -131,6 +131,8 @@ y_test = le.transform(y_test)
 LabelEncoder has no categories parameter — it randomly assigns numbers to classes (e.g., Yes → 1, No → 0, or vice versa — not something you control).
 Since there's no real order needed for a binary/multi-class target for most classifiers, this is fine.
 Fit only on y_train, transform both y_train and y_test.
+```
+
 Key Takeaways / Revision Points
 Nominal data → no order between categories → use One-Hot Encoding
 Ordinal data → clear order between categories → use Ordinal Encoding (must manually specify category order)
