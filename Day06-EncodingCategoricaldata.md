@@ -84,11 +84,11 @@ Columns:
 | purchased | Nominal (target/output) |
 
 ### Step 2: Plan of encoding
-- `gender` → One-Hot Encoding (not covered in this note, next video)
+- `gender` → One-Hot Encoding (not covered in this note)
 - `review`, `education` → Ordinal Encoding
 - `purchased` → Label Encoding
 
-> Ideally, all of this can be done together using `ColumnTransformer` (with different pipelines for different columns) — to be covered in a future note/video. For now, ignoring `gender` and demonstrating only `review`, `education` (Ordinal Encoding) and `purchased` (Label Encoding).
+> Ideally, all of this can be done together using `ColumnTransformer` (with different pipelines for different columns) — to be covered in a future note. For now, ignoring `gender` and demonstrating only `review`, `education` (Ordinal Encoding) and `purchased` (Label Encoding).
 
 ### Step 3: Train-Test Split (always do this FIRST before any transformation)
 
