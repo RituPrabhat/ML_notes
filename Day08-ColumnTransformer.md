@@ -130,30 +130,47 @@ Step 2: Fit and transform in one line
 
 X_train_transformed = transformer.fit_transform(X_train)
 X_test_transformed = transformer.transform(X_test)
+
 Just pass the entire X_train dataframe (not individual columns!) — ColumnTransformer internally figures out which columns go to which transformer based on the tuples you defined.
+
 It automatically:
+
 Applies SimpleImputer to fever
+
 Applies OrdinalEncoder to cough
+
 Applies OneHotEncoder to gender and city
+
 Passes age through unchanged
+
 Combines all of this into a single final array — no manual hstack/concatenate needed!
+
 Result
+
 Same final output as the manual approach — 7 columns total — but achieved in a fraction of the code and effort.
 
 For the test set, only .transform() (not .fit_transform()) is called — same rule as before: fit only on train data, transform both train and test.
 
 Key Takeaways / Revision Points
-Problem solved by ColumnTransformer: applying different preprocessing techniques (imputation, scaling, encoding, etc.) to different columns and combining results — without manually splitting data, transforming each part separately, and re-joining with hstack/concatenate.
-Import: from sklearn.compose import ColumnTransformer
-Syntax:
+
+1) Problem solved by ColumnTransformer: applying different preprocessing techniques (imputation, scaling, encoding, etc.) to different columns and combining results — without manually splitting data, transforming each part separately, and re-joining with hstack/concatenate.
+   
+2) Import: from sklearn.compose import ColumnTransformer
+   
+3) Syntax:
 
 ColumnTransformer(transformers=[
     ('name1', transformer_object_1, ['col1']),
     ('name2', transformer_object_2, ['col2']),
     ('name3', transformer_object_3, ['col3', 'col4']),
 ], remainder='drop' or 'passthrough')
-Each tuple in transformers = (name, transformer_object, list_of_columns)
-remainder='passthrough' → keeps untouched columns in the output; remainder='drop' (default) → discards them
-Just call .fit_transform(X_train) and .transform(X_test) on the whole dataframe — no need to manually select/split columns yourself
-Massively simplifies code and reduces room for bugs, especially as the number of columns grows (imagine doing the manual approach with 50 columns)
-Practice tip: pick any dataset and try applying ColumnTransformer yourself for hands-on understanding
+
+4) Each tuple in transformers = (name, transformer_object, list_of_columns)
+
+5) remainder='passthrough' → keeps untouched columns in the output; remainder='drop' (default) → discards them
+   
+6) Just call .fit_transform(X_train) and .transform(X_test) on the whole dataframe — no need to manually select/split columns yourself
+
+7) Massively simplifies code and reduces room for bugs, especially as the number of columns grows (imagine doing the manual approach with 50 columns)
+   
+8) Practice tip: pick any dataset and try applying ColumnTransformer yourself for hands-on understanding
