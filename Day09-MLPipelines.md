@@ -54,11 +54,17 @@ from sklearn.impute import SimpleImputer      # for handling missing values
 from sklearn.preprocessing import OneHotEncoder  # for categorical data
 from sklearn.preprocessing import MinMaxScaler   # for feature scaling
 from sklearn.tree import DecisionTreeClassifier  # for prediction
+
 Dataset overview
+
 Titanic passenger dataset.
+
 Target column: Survived (0 = passenger died, 1 = passenger survived).
+
 Goal: build a model that predicts survival based on passenger details — Passenger Class, Sex, Age, SibSp (siblings/spouses), Parch (parents/children), Fare, Embarked.
+
 Step 1: Drop unnecessary columns
+
 Dropped 4 columns not useful for prediction:
 
 PassengerId
@@ -74,6 +80,7 @@ y = df['Survived']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 Step 3: Identify Missing Values
+
 Known columns with missing values in this dataset:
 
 Age — has missing values
@@ -81,6 +88,7 @@ Embarked — has missing values
 Missing values must be handled before proceeding further.
 
 Step 4: Applying Imputation
+
 Two separate SimpleImputer objects were created — one for Age, one for Embarked:
 
 
@@ -94,13 +102,16 @@ X_test_age = si_age.transform(X_test[['Age']])
 
 X_train_embarked = si_embarked.fit_transform(X_train[['Embarked']])
 X_test_embarked = si_embarked.transform(X_test[['Embarked']])
+
 Why two separate imputer objects instead of one?
 
 You cannot pass both Age and Embarked together into a single SimpleImputer with the same strategy, because they need different fill strategies (mean vs. most frequent).
 Also, technically, doing them together would create complications since both columns simultaneously have missing values and one transformation choice doesn't fit both data types — so they must be handled with separate objects/transforms.
+
 After this step: Age and Embarked no longer have missing values.
 
 Step 5: One-Hot Encoding on Sex and Embarked
+
 Two separate OneHotEncoder objects were created (again, due to similar reasons — can't cleanly combine differently-shaped categorical columns in a single object here):
 
 
@@ -111,8 +122,10 @@ X_test_sex = ohe_sex.transform(X_test[['Sex']])
 ohe_embarked = OneHotEncoder(sparse=False, handle_unknown='ignore')
 X_train_embarked_ohe = ohe_embarked.fit_transform(X_train_embarked)
 X_test_embarked_ohe = ohe_embarked.transform(X_test_embarked)
+
 Why two separate calls? Because Sex has no missing values but Embarked had missing values that first needed to be filled (from Step 4) before applying one-hot encoding on top of it. The workflow needs to happen in sequence, and combining both into a single .fit_transform() call directly wasn't feasible at this stage without a pipeline/column transformer.
 handle_unknown='ignore' parameter: this means if, in the future, the test data contains a completely new/unseen category not seen during training, the encoder won't throw an error — it'll just encode it as all zeros instead of crashing.
+
 Note: no drop='first' was used here (i.e., dummy variable trap wasn't specifically avoided) — reasoning given: since a Decision Tree model is being used (not a linear model), multicollinearity from dummy variables doesn't meaningfully affect tree-based models, so it doesn't matter here.
 Result: Sex → 2 new columns (male/female), Embarked → 3 new columns (Southampton/Cherbourg/Queenstown).
 
@@ -120,7 +133,9 @@ Step 6: Extract the remaining untouched columns
 
 X_train_remaining = X_train.drop(columns=['Sex', 'Age', 'Embarked']).values
 X_test_remaining = X_test.drop(columns=['Sex', 'Age', 'Embarked']).values
+
 These are the columns that needed no special preprocessing at all (Pclass, SibSp, Parch, Fare) — left as-is.
+
 Step 7: Concatenate everything back together
 
 X_train_transformed = np.concatenate(
