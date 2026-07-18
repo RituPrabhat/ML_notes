@@ -178,11 +178,13 @@ Key Takeaways / Revision Points
    
 3) Syntax:
 
+```python
 ColumnTransformer(transformers=[
     ('name1', transformer_object_1, ['col1']),
     ('name2', transformer_object_2, ['col2']),
     ('name3', transformer_object_3, ['col3', 'col4']),
 ], remainder='drop' or 'passthrough')
+```
 
 4) Each tuple in transformers = (name, transformer_object, list_of_columns)
 
