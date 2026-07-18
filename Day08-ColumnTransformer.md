@@ -74,6 +74,7 @@ X_test_cough = oe.transform(X_test[['cough']])
 ```
 
 1)Order specified: Mild < Strong.
+
 2)Again, only this single column is processed at a time.
 
 Step 4: One-Hot Encoding on gender and city columns
@@ -115,6 +116,7 @@ Final shape check: 1 (age) + 1 (fever) + 4 (gender+city) + 1 (cough) = 7 columns
 Takeaway: This worked, but it was a LOT of separate steps for just 4-5 columns — each requiring its own fit/transform, and finally manual concatenation. Imagine doing this with 50 columns — extremely time-consuming and error-prone.
 
 Approach 2: The "Easy Way" — Using ColumnTransformer
+
 Step 1: Import and create the transformer
 
 ```python
