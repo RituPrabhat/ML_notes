@@ -471,28 +471,48 @@ The production code stays completely untouched, no matter how much you change yo
 
 This is contrasted directly with Part 1 (without pipeline), where any small preprocessing change required you to manually go back and edit your production code as well — a fragile, error-prone process.
 
-Key Takeaways / Revision Points
+```
+Key Takeaways / Revision Points:
+
 Pipeline chains multiple steps (preprocessing + model) into a single object — output of each step automatically feeds into the next.
+
 Import: from sklearn.pipeline import Pipeline
+
 Syntax: Pipeline([('name1', obj1), ('name2', obj2), ...]) — list of (name, object) tuples
+
 make_pipeline(obj1, obj2, ...) is a shortcut that skips naming — simpler, but less debuggable; naming your steps explicitly (using Pipeline class) is preferred for later inspection/debugging
+
 Same distinction applies to ColumnTransformer vs make_column_transformer
+
 Always reference columns by index, not name, inside pipeline steps — because intermediate outputs become plain NumPy arrays (column names get lost after the first transformation)
+
 .fit() + .predict() → when pipeline includes a final model/algorithm step
+
 .fit_transform() → when pipeline is preprocessing-only (no model at the end)
+
 Visualize your pipeline using:
 
 from sklearn import set_config
+
 set_config(display='diagram')
+
 then just display the pipeline object — extremely helpful for understanding/explaining pipeline structure at a glance
+
 Debug/inspect any step using pipe.named_steps['<step_name>'], then drill into internal attributes (e.g., .transformers_, .statistics_) to check learned values (like computed mean, most frequent category, etc.)
+
 Cross-validation works directly on pipeline objects: cross_val_score(pipe, X_train, y_train, cv=5)
+
 Hyperparameter tuning works directly on pipeline objects too, via GridSearchCV — but hyperparameter names must be prefixed with the step name and double underscore: '<step_name>__<param_name>'
+
 Deployment is dramatically simpler with pipelines:
+
 Only ONE file needs to be pickled/exported (the whole pipeline), instead of separately exporting the model + every individual transformer
+
 Production code becomes short and stable — it never needs to change even if you modify preprocessing logic later; you just swap out the updated .pkl file
+
 Interview relevance: Pipelines are a commonly asked interview topic — understanding and being able to explain them well is considered valuable for job interviews in this field
-Overall conclusion: Learn and use pipelines as early as possible in your ML workflow — they save enormous time/effort during both experimentation and especially production deployment, and prevent the exact bugs/mismatches shown in the "without pipeline" (Part 1) approach
+
+Overall conclusion: Learn and use pipelines as early as possible in your ML workflow — they save enormous time/effort during both experimentation and especially production deployment, and prevent the exact bugs/mismatches shown in the "without pipeline" (Part 1) approach.
 
 
 
