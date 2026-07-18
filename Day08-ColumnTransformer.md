@@ -49,12 +49,13 @@ X_train, X_test, y_train, y_test = train_test_split(...)
 
 Step 2: Handle missing values in fever column
 
+```python
 from sklearn.impute import SimpleImputer
 
 si = SimpleImputer()
 X_train_fever = si.fit_transform(X_train[['fever']])
 X_test_fever = si.transform(X_test[['fever']])
-
+```
 
 1) Only the fever column is selected and passed in.
    
@@ -64,34 +65,42 @@ X_test_fever = si.transform(X_test[['fever']])
 
 Step 3: Ordinal Encoding on cough column
 
+```python
 from sklearn.preprocessing import OrdinalEncoder
 
 oe = OrdinalEncoder(categories=[['Mild', 'Strong']])
 X_train_cough = oe.fit_transform(X_train[['cough']])
 X_test_cough = oe.transform(X_test[['cough']])
+```
 
 1)Order specified: Mild < Strong.
 2)Again, only this single column is processed at a time.
 
 Step 4: One-Hot Encoding on gender and city columns
 
+```python
 from sklearn.preprocessing import OneHotEncoder
 
 ohe = OneHotEncoder(drop='first')
 X_train_gender_city = ohe.fit_transform(X_train[['gender', 'city']]).toarray()
 X_test_gender_city = ohe.transform(X_test[['gender', 'city']]).toarray()
+```
+
 gender has 2 categories → 1 column after dropping first (dummy variable trap avoided)
 city has 4 categories → 3 columns after dropping first
 Total: 1 + 3 = 4 new columns
 
 Step 5: Extract the untouched age column
 
+```python
 X_train_age = X_train.drop(columns=['fever', 'cough', 'gender', 'city']).values
 X_test_age = X_test.drop(columns=['fever', 'cough', 'gender', 'city']).values
 age needs no transformation, so it's extracted separately, as-is.
+```
 
 Step 6: Concatenate everything back together
 
+```python
 X_train_transformed = np.concatenate(
     (X_train_age, X_train_fever, X_train_gender_city, X_train_cough),
     axis=1
@@ -100,12 +109,15 @@ X_test_transformed = np.concatenate(
     (X_test_age, X_test_fever, X_test_gender_city, X_test_cough),
     axis=1
 )
+```
+
 Final shape check: 1 (age) + 1 (fever) + 4 (gender+city) + 1 (cough) = 7 columns total.
 Takeaway: This worked, but it was a LOT of separate steps for just 4-5 columns — each requiring its own fit/transform, and finally manual concatenation. Imagine doing this with 50 columns — extremely time-consuming and error-prone.
 
 Approach 2: The "Easy Way" — Using ColumnTransformer
 Step 1: Import and create the transformer
 
+```python
 from sklearn.compose import ColumnTransformer
 
 transformer = ColumnTransformer(transformers=[
@@ -113,6 +125,8 @@ transformer = ColumnTransformer(transformers=[
     ('tm2', OrdinalEncoder(categories=[['Mild', 'Strong']]), ['cough']),
     ('tm3', OneHotEncoder(sparse=False, drop='first'), ['gender', 'city'])
 ], remainder='passthrough')
+```
+
 Breaking down ColumnTransformer's parameters:
 1. transformers — a list of tuples, where each tuple has exactly 3 elements:
 
@@ -129,8 +143,10 @@ Since age needs no transformation but should still be part of the final output, 
 
 Step 2: Fit and transform in one line
 
+```python
 X_train_transformed = transformer.fit_transform(X_train)
 X_test_transformed = transformer.transform(X_test)
+```
 
 Just pass the entire X_train dataframe (not individual columns!) — ColumnTransformer internally figures out which columns go to which transformer based on the tuples you defined.
 
