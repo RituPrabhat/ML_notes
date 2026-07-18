@@ -474,11 +474,11 @@ This is contrasted directly with Part 1 (without pipeline), where any small prep
 ```
 Key Takeaways / Revision Points:
 
-Pipeline chains multiple steps (preprocessing + model) into a single object — output of each step automatically feeds into the next.
+-Pipeline chains multiple steps (preprocessing + model) into a single object — output of each step automatically feeds into the next.
 
-Import: from sklearn.pipeline import Pipeline
+-Import: from sklearn.pipeline import Pipeline
 
-Syntax: Pipeline([('name1', obj1), ('name2', obj2), ...]) — list of (name, object) tuples
+-Syntax: Pipeline([('name1', obj1), ('name2', obj2), ...]) — list of (name, object) tuples
 
 make_pipeline(obj1, obj2, ...) is a shortcut that skips naming — simpler, but less debuggable; naming your steps explicitly (using Pipeline class) is preferred for later inspection/debugging
 
