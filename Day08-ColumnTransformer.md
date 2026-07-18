@@ -55,11 +55,12 @@ si = SimpleImputer()
 X_train_fever = si.fit_transform(X_train[['fever']])
 X_test_fever = si.transform(X_test[['fever']])
 
+
 1) Only the fever column is selected and passed in.
    
-2)Missing values get replaced with the column mean.
+2) Missing values get replaced with the column mean.
 
-3)Result: a transformed array with all missing values filled, for just this one column.
+3) Result: a transformed array with all missing values filled, for just this one column.
 
 Step 3: Ordinal Encoding on cough column
 
