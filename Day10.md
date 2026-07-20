@@ -81,6 +81,7 @@ Before applying any transform, you need a way to check whether your data is alre
 sns.distplot(df['column_name'])
 ```
 Visually plots the distribution — gives a rough/intuitive idea of how close it is to a bell curve (normal shape) vs. skewed.
+
 Method 2: Skewness (skew())
 
 ```python
@@ -96,11 +97,15 @@ Considered the most reliable way to check if data is normally distributed.
 (A dedicated, in-depth video on Q-Q plots is planned separately, since it's a statistics-heavy topic deserving its own explanation — this note only covers how to read one at a practical level.)
 
 Understanding Q-Q Plots (How to Read Them)
+
 A Q-Q plot has:
 
 X-axis: Theoretical quantiles (from a true normal distribution)
+
 Y-axis: Your actual data's sample quantiles
+
 How to interpret it:
+
 There's a reference straight line (typically at a 45° angle).
 The more your data points lie exactly on this line, the more normally distributed your data is.
 The more the points deviate from this line (and the more the shape/angle of scattered points curves away), the further your data is from being normally distributed.
