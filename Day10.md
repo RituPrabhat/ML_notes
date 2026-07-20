@@ -89,9 +89,12 @@ df['column_name'].skew()
 If skewness value is close to 0 → distribution is roughly symmetric/normal.
 Negative value → left-skewed.
 Positive value → right-skewed.
+
 Method 3: Q-Q Plot (Quantile-Quantile Plot) — Most Reliable Method
 Considered the most reliable way to check if data is normally distributed.
+
 (A dedicated, in-depth video on Q-Q plots is planned separately, since it's a statistics-heavy topic deserving its own explanation — this note only covers how to read one at a practical level.)
+
 Understanding Q-Q Plots (How to Read Them)
 A Q-Q plot has:
 
